@@ -1,0 +1,21 @@
+  - name: Retrive EC2 instance info
+    ec2_instance_info:
+      filters: 
+        "tag:app": jenkins
+        instance-state-name: ["running"]
+    register: ec2_instances
+  
+  - name: Launch an EC2 instance in target VPC
+    ec2:
+      key_name: "{{ key_name }}"
+      region: "{{ aws_region }}"
+      instance_type: t2.micro
+      image: "{{ image_id }}"
+      wait: yes
+      group_id: ["{{ ec2_vpc_sgs.security_groups[0].group_id }}"]
+      count: "{{ number_of_instance }}"
+      vpc_subnet_id: "{{ ec2_vpc_subnet.subnets[0].subnet_id }}"
+      instance_tags: 
+        app: jenkins
+      assign_public_ip: yes
+    when: ec2_instances.instances|length < 1
