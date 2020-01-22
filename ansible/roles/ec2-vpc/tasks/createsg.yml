@@ -1,10 +1,10 @@
 ---
 - name: Create Main Security Group
   ec2_group:
-    name: My Security Group
+    name: "{{ ec2_vpc_name }}-sg"
     description: My Security Group
     vpc_id: "{{ ec2_vpc_id }}"
-    region: "{{ ec2_region }}"
+    region: "{{ aws_region }}"
     rules:
       - proto: tcp
         from_port: 22

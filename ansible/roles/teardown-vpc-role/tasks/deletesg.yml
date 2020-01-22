@@ -1,0 +1,7 @@
+- name: Deleted EC2 security group for VPC
+  ec2_group:
+    name: "{{ ec2_vpc_name }}-sg"
+    region: "{{ aws_region }}"   
+    vpc_id: "{{ ec2_vpc_id }}"
+    state: absent
+  register: delete_sg
