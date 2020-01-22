@@ -5,6 +5,8 @@
     description: My Security Group
     vpc_id: "{{ ec2_vpc_id }}"
     region: "{{ aws_region }}"
+    tags: 
+      Name: "{{ ec2_vpc_name }}-sg"
     rules:
       - proto: tcp
         from_port: 22

@@ -1,0 +1,11 @@
+ec2_vpc_name: 'sample'
+aws_region: us-east-1
+
+# EC2 instance key name
+key_name: ansible
+
+# Image id 
+image_id: ami-04b9e92b5572fa0d1
+
+# Number of instances
+number_of_instance: 1
