@@ -1,0 +1,16 @@
+---
+- name: Create VPC
+  ec2_vpc_net:
+    name: "{{ ec2_vpc_name }}"
+    cidr_block: "{{ ec2_vpc_block }}"
+    region: "{{ ec2_region }}"
+    tags:
+      Name: "{{ec2_vpc_name}}-vpc"
+    state: present
+  register: vpc_details
+
+- name: Store VPC ID for future use
+  set_fact:
+    ec2_vpc_id: "{{vpc_details.vpc.id}}"
+
+- debug: msg="Created VPC with ID {{ec2_vpc_id}}"

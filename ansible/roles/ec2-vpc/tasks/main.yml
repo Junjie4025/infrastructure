@@ -1,0 +1,17 @@
+---
+
+- include_tasks: createvpc.yml
+  tags: subnet,igw,route
+- include_tasks: createsg.yml
+
+- name: Create or retrieve subnet details.
+  include_tasks: createsubnets.yml
+  tags: subnet
+
+- name: Create or retrieve IGW Details.
+  include_tasks: createigw.yml
+  tags: igw,route
+
+- name: Create or retrieve Route Table details.
+  include_tasks: createroutetable.yml
+  tags: route
