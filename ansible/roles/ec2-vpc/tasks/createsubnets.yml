@@ -3,8 +3,8 @@
   ec2_vpc_subnet:
     state: present
     vpc_id: "{{ec2_vpc_id}}"
-    az: "{{ ec2_region }}a"
-    region: "{{ ec2_region }}"
+    az: "{{ aws_region }}a"
+    region: "{{ aws_region }}"
     tags:
       Name: "{{ec2_vpc_name}}-subnet"
     cidr: "{{subnet_cidr_block}}"
