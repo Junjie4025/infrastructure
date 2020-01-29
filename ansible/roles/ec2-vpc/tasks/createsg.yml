@@ -6,7 +6,7 @@
     description: My Security Group
     vpc_id: "{{ ec2_vpc_id }}"
     region: "{{ aws_region }}"
-    tags: 
+    tags:
       Name: "{{ ec2_vpc_name }}-sg"
     rules:
       - proto: tcp
@@ -24,4 +24,4 @@
   register: security_group_details
 - name: Store EC2 Group ID.
   set_fact:
-   ec2_group_id : "{{security_group_details.group_id}}"
+    ec2_group_id: "{{security_group_details.group_id}}"

@@ -1,6 +1,7 @@
 ---
 - name: Get the VPC ID
   ec2_vpc_net_info:
+    profile: "{{profile}}"
     filters:
       "tag:Name": "{{ ec2_vpc_name }}-vpc"
     region: "{{ aws_region }}"
@@ -12,22 +13,23 @@
 
 - name: Get route information
   ec2_vpc_route_table_info:
+    profile: "{{profile}}"
     region: "{{ aws_region }}"
     filters:
       vpc_id: "{{ ec2_vpc_id }}"
   register: route_table_info
 
-- name: Delete SG
+- name: Delete Security Group
   include_tasks: deletesg.yml
 
-- name: Delete SG 
+- name: Delete Subnets
   include_tasks: deletesubnets.yml
 
-- name: Delete SG
+- name: Delete Internet Gateway
   include_tasks: deleteigw.yml
 
-- name: Delete SG 
+- name: Delete Route Table
   include_tasks: deleteroutetable.yml
 
-- name: Delete SG
+- name: Delete VPC
   include_tasks: deletevpc.yml

@@ -1,5 +1,4 @@
 ---
-
 - include_tasks: createvpc.yml
   tags: subnet,igw,route
 - include_tasks: createsg.yml

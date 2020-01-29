@@ -15,5 +15,5 @@
     ec2_vpc_id: "{{vpc_details.vpc.id}}"
 
 - name: debug message
-  debug: 
-    msg : "Created VPC with ID {{ec2_vpc_id}}"
+  debug:
+    msg: "Created VPC with ID {{ec2_vpc_id}}"
