@@ -5,12 +5,15 @@
   tasks:
 
     - import_role:
+        name: roles/ec2-vpc
+        
+    - import_role:
         name: roles/launch-instance
 
 - hosts: webservers
   remote_user: ubuntu
   become: yes
-  become_user: root
+  gather_facts: no
   pre_tasks:
    - name: 'Update packages'
      raw: 'sudo apt-get -y update'

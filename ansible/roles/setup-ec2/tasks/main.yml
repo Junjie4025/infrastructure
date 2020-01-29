@@ -62,7 +62,7 @@
   shell: "systemctl stop jenkins"
     
 - name: Get certs
-  shell: "certbot --nginx --noninteractive --agree-tos --email {{email_id}} -d jenkins.{{domain_name}}"
+  shell: "certbot --nginx --noninteractive --agree-tos --email {{email_id}} -d jenkins.{{domain_name}} --staging"
 
 - name: Start Jenkins
   shell: "systemctl start jenkins"

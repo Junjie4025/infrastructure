@@ -2,6 +2,7 @@
 - name: Create subnet with IPv6 block assigned
   ec2_vpc_subnet:
     state: present
+    profile: "{{profile}}"
     vpc_id: "{{ec2_vpc_id}}"
     az: "{{ aws_region }}a"
     region: "{{ aws_region }}"

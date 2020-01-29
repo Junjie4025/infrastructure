@@ -4,6 +4,7 @@
 - name: Create route table rules to create a public subnet.
   ec2_vpc_route_table:
     vpc_id: '{{ec2_vpc_id}}'
+    profile: "{{profile}}"
     region: '{{aws_region}}'
     subnets:
       - "{{subnet_id}}"

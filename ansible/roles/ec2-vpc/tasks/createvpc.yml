@@ -2,6 +2,7 @@
 - name: Create VPC
   ec2_vpc_net:
     name: "{{ ec2_vpc_name }}-vpc"
+    profile: "{{profile}}"
     cidr_block: "{{ vpc_cidr_block }}"
     region: "{{ aws_region }}"
     tags:

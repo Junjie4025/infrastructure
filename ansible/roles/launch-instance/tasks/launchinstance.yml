@@ -8,7 +8,7 @@
     wait: yes
     group_id: ["{{ ec2_vpc_sgs.security_groups[0].group_id }}"]
     count_tag: 
-      Name: Jenkins_instance
+      Name: "Jenkins_instance"
     exact_count: "{{ number_of_instance}}"
     vpc_subnet_id: "{{ ec2_vpc_subnet.subnets[0].subnet_id }}"
     instance_tags:
@@ -19,6 +19,7 @@
   
 - name: Retrive EC2 instance info
   ec2_instance_info:
+    profile: "{{profile}}"
     filters:
       "tag:app": jenkins
       instance-state-name: ["running"]
