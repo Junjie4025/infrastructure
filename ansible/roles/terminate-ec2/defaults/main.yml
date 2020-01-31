@@ -1,0 +1,5 @@
+aws_region: us-east-1
+tag_key: app
+tag_value: jenkins
+#route53_records_to_remove: "{{domain_name}}"
+set: 60

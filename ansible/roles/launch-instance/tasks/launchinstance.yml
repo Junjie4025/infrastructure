@@ -1,0 +1,54 @@
+- name: Launch an instance in target VPC
+  ec2:
+    key_name: "{{key_name}}"
+    profile: "{{profile}}"
+    region: "{{aws_region}}"
+    instance_type: t2.micro
+    image: "{{ image_id }}"
+    wait: yes
+    group_id: ["{{ ec2_vpc_sgs.security_groups[0].group_id }}"]
+    count_tag: 
+      Name: Jenkins_instance
+    exact_count: "{{ number_of_instance}}"
+    vpc_subnet_id: "{{ ec2_vpc_subnet.subnets[0].subnet_id }}"
+    instance_tags:
+      app: jenkins
+      Name: Jenkins_instance
+    assign_public_ip: yes
+  register: ec2_details
+  
+- name: Retrive EC2 instance info
+  ec2_instance_info:
+    filters:
+      "tag:app": jenkins
+      instance-state-name: ["running"]
+  register: ec2_instances
+
+- name: Debug
+  debug:
+    msg: "{{ec2_instances}}"
+
+- name: Add the newly created host so that we can further contact it
+  add_host:
+    name: "{{ec2_instances.instances[0].network_interfaces[0].association.public_dns_name}}"
+    groups: webservers
+  
+- name: Wait for SSH to come up
+  wait_for:
+    host: "{{ec2_instances.instances[0].network_interfaces[0].association.public_dns_name}}"
+    port: 22
+    state: started
+  
+
+- name: Create DNS entry
+  route53:
+    state: present
+    profile: "{{profile}}"
+    zone: "{{domain_name}}"
+    overwrite: yes
+    record: "jenkins.{{domain_name}}"
+    type: CNAME
+    ttl: 60
+    value: "{{ec2_instances.instances[0].network_interfaces[0].association.public_dns_name}}"
+  
+

@@ -1,0 +1,24 @@
+---
+
+- hosts: local
+  connection: local
+  tasks:
+
+    - import_role:
+        name: roles/launch-instance
+
+- hosts: webservers
+  remote_user: ubuntu
+  become: yes
+  become_user: root
+  pre_tasks:
+   - name: 'Update packages'
+     raw: 'sudo apt-get -y update'
+   - name: 'install python'
+     raw: 'sudo apt-get -y install python'
+
+  tasks:
+    - import_role:
+        name: roles/setup-ec2
+  
+  

@@ -1,0 +1,15 @@
+---
+- name: Create subnet with IPv6 block assigned
+  ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ec2_vpc_id}}"
+    az: "{{ aws_region }}a"
+    region: "{{ aws_region }}"
+    tags:
+      Name: "{{ec2_vpc_name}}-subnet"
+    cidr: "{{subnet_cidr_block}}"
+  register: subnet_details
+- name: Store id for future use
+  set_fact:
+    subnet_id: "{{subnet_details.subnet.id}}"
+  tags: subnet
