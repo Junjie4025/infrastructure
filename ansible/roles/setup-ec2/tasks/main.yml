@@ -1,0 +1,70 @@
+---
+- name: Install Open-JDK
+  apt:
+    name: "openjdk-8-jdk"
+    state: "present"
+
+- name: Ensure dependencies are installed.
+  apt:
+    name:
+      - curl
+      - apt-transport-https
+      - gnupg
+    state: present
+
+- name: Download specific Jenkins version.
+  get_url:
+    url: "https://pkg.jenkins.io/debian/binary/jenkins_2.215_all.deb"
+    dest: "/tmp/jenkins_2.215_all.deb"
+
+- name: Install our specific version of Jenkins.
+  apt:
+    deb: "/tmp/jenkins_2.215_all.deb"
+    state: present
+
+- name: Ensure Jenkins is installed.
+  apt:
+    name: jenkins
+    state: present
+
+- name: Install NGINX
+  apt:
+    name: "nginx"
+    state: present
+
+- name: create letsencrypt directory
+  file:
+    name: /var/www/letsencrypt
+    state: directory
+
+- name: Remove default nginx config
+  file:
+    name: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Copy nginx configuration in place.
+  template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/nginx.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload nginx
+
+- name: Install certbot
+  apt:
+    name: "python-certbot-nginx"
+    state: present
+
+- name: Stop Jenkins
+  shell: "systemctl stop jenkins"
+
+- name: Get certs
+  shell: "certbot --nginx --noninteractive --agree-tos --email {{email_id}} -d jenkins.{{domain_name}}"
+
+- name: Start Jenkins
+  shell: "systemctl start jenkins"
+
+- name: Copy jenkins first admin password
+  shell: "cat /var/lib/jenkins/secrets/initialAdminPassword"

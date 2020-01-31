@@ -1,0 +1,23 @@
+---
+- hosts: local
+  connection: local
+  tasks:
+    - import_role:
+        name: roles/ec2-vpc
+
+    - import_role:
+        name: roles/launch-instance
+
+- hosts: webservers
+  remote_user: ubuntu
+  become: yes
+  gather_facts: no
+  pre_tasks:
+    - name: "Update packages"
+      raw: "sudo apt-get -y update"
+    - name: "install python"
+      raw: "sudo apt-get -y install python"
+
+  tasks:
+    - import_role:
+        name: roles/setup-ec2
