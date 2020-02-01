@@ -2,6 +2,7 @@
 - name: Create VPC
   ec2_vpc_net:
     name: "{{ ec2_vpc_name }}-vpc"
+    profile: "{{profile}}"
     cidr_block: "{{ vpc_cidr_block }}"
     region: "{{ aws_region }}"
     tags:
@@ -14,5 +15,5 @@
     ec2_vpc_id: "{{vpc_details.vpc.id}}"
 
 - name: debug message
-  debug: 
-    msg : "Created VPC with ID {{ec2_vpc_id}}"
+  debug:
+    msg: "Created VPC with ID {{ec2_vpc_id}}"

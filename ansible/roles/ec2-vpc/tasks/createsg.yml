@@ -2,10 +2,11 @@
 - name: Create Main Security Group
   ec2_group:
     name: "{{ ec2_vpc_name }}-sg"
+    profile: "{{profile}}"
     description: My Security Group
     vpc_id: "{{ ec2_vpc_id }}"
     region: "{{ aws_region }}"
-    tags: 
+    tags:
       Name: "{{ ec2_vpc_name }}-sg"
     rules:
       - proto: tcp
@@ -16,7 +17,11 @@
         from_port: 80
         to_port: 80
         cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
   register: security_group_details
 - name: Store EC2 Group ID.
   set_fact:
-   ec2_group_id : "{{security_group_details.group_id}}"
+    ec2_group_id: "{{security_group_details.group_id}}"

@@ -1,16 +1,17 @@
 ---
+- name: Get security group
+  ec2_group_info:
+    profile: "{{profile}}"
+    filters:
+      "tag:Name": "{{ ec2_vpc_name }}-sg"
+  register: ec2_vpc_sgs
 
-  - name: Get security group
-    ec2_group_info:
-      filters:
-        "tag:Name": "{{ ec2_vpc_name }}-sg"
-    register: ec2_vpc_sgs
+- name: Get VPC subnet image_id
+  ec2_vpc_subnet_info:
+    profile: "{{profile}}"
+    filters:
+      "tag:Name": "{{ ec2_vpc_name }}-subnet"
+  register: ec2_vpc_subnet
 
-  - name: Get VPC subnet image_id
-    ec2_vpc_subnet_info:
-      filters:
-        "tag:Name": "{{ ec2_vpc_name }}-subnet"
-    register: ec2_vpc_subnet
-
-  - name: Launch EC2 instance
-    include_tasks: launchinstance.yml
+- name: Launch EC2 instance
+  include_tasks: launchinstance.yml
