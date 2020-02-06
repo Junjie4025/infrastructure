@@ -10,22 +10,28 @@
       - curl
       - apt-transport-https
       - gnupg
+      - maven
+      - docker.io
     state: present
 
-- name: Download specific Jenkins version.
-  get_url:
-    url: "https://pkg.jenkins.io/debian/binary/jenkins_2.215_all.deb"
-    dest: "/tmp/jenkins_2.215_all.deb"
+- name: Add an Apt signing key, uses whichever key is at the URL
+  apt_key:
+    url: https://pkg.jenkins.io/debian/jenkins.io.key
+    state: present
 
-- name: Install our specific version of Jenkins.
+- name: add to sources.list
+  command: "sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'"
+
+- name: Update and upgrade apt packages
+  become: true
   apt:
-    deb: "/tmp/jenkins_2.215_all.deb"
-    state: present
+    update_cache: yes
 
 - name: Ensure Jenkins is installed.
   apt:
     name: jenkins
     state: present
+  register: jenkins_status
 
 - name: Install NGINX
   apt:
@@ -57,14 +63,20 @@
     name: "python-certbot-nginx"
     state: present
 
-- name: Stop Jenkins
-  shell: "systemctl stop jenkins"
+- name: Add user to group
+  user:
+    name: jenkins
+    group: docker
+    append: yes
 
 - name: Get certs
   shell: "certbot --nginx --noninteractive --agree-tos --email {{email_id}} -d jenkins.{{domain_name}}"
 
-- name: Start Jenkins
-  shell: "systemctl start jenkins"
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: jenkins
 
 - name: Copy jenkins first admin password
   shell: "cat /var/lib/jenkins/secrets/initialAdminPassword"
+  when: jenkins_status.changed == true
