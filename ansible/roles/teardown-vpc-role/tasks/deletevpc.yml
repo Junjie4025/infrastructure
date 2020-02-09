@@ -1,5 +1,6 @@
 - name: Delete VPC
   ec2_vpc_net:
+    profile: "{{profile}}"
     name: "{{ ec2_vpc_name }}-vpc"
     cidr_block: "{{ vpc_cidr_block }}"
     region: "{{ aws_region }}"

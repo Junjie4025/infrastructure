@@ -1,5 +1,6 @@
 - name: Deleted EC2 security group for VPC
   ec2_group:
+    profile: "{{profile}}"
     name: "{{ ec2_vpc_name }}-sg"
     region: "{{ aws_region }}"
     vpc_id: "{{ ec2_vpc_id }}"

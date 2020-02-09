@@ -1,5 +1,6 @@
 - name: Delete VPC public subnet route table
   ec2_vpc_route_table:
+    profile: "{{profile}}"
     region: "{{ aws_region }}"
     vpc_id: "{{ ec2_vpc_id }}"
     tags:
